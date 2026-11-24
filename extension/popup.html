@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tab Sync</title>
+  <style>
+    body { width: 18rem; margin: 1rem; font: 14px system-ui, sans-serif; }
+    label { display: block; margin: 0.7rem 0; }
+    input { box-sizing: border-box; display: block; width: 100%; margin-top: 0.25rem; padding: 0.45rem; }
+    .buttons { display: flex; gap: 0.5rem; }
+    button { flex: 1; padding: 0.5rem; cursor: pointer; }
+    #status { min-height: 2.5em; color: #666; }
+    #status.failed { color: #b00020; }
+  </style>
+</head>
+<body>
+  <label>GitHub token<input id="token" type="password" autocomplete="off"></label>
+  <label>GitHub username<input id="username" type="text" autocomplete="username"></label>
+  <label>Repository name<input id="repo" type="text" autocomplete="off"></label>
+  <div class="buttons">
+    <button id="save" type="button">Save</button>
+    <button id="sync" type="button">Sync Now</button>
+  </div>
+  <p id="status" role="status" aria-live="polite">No sync yet.</p>
+  <script src="popup.js"></script>
+</body>
+</html>

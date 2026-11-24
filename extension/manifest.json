@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Sync",
+  "version": "1.0.0",
+  "description": "Sync named tab groups to this repository.",
+  "permissions": ["tabs", "tabGroups", "storage"],
+  "host_permissions": ["https://api.github.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

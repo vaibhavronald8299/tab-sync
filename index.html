@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Open Group</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: system-ui, sans-serif;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    main {
+      width: min(20rem, calc(100% - 2rem));
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    input, button {
+      box-sizing: border-box;
+      min-height: 2.8rem;
+      border: 1px solid color-mix(in srgb, CanvasText 22%, transparent);
+      border-radius: 0.6rem;
+      font: inherit;
+    }
+
+    input {
+      min-width: 0;
+      flex: 1;
+      padding: 0.65rem 0.8rem;
+      background: Canvas;
+      text-align: center;
+    }
+
+    button {
+      padding: 0.65rem 0.9rem;
+      background: ButtonFace;
+      color: ButtonText;
+      cursor: pointer;
+    }
+
+    #message {
+      min-height: 1.4em;
+      margin: 0.8rem 0 0;
+      color: GrayText;
+      font-size: 0.9rem;
+    }
+
+    #message.invalid {
+      color: #b45b5b;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <form id="open-form">
+      <input id="code" type="password" aria-label="Group code" autocomplete="off" required>
+      <button type="submit">Open Group</button>
+    </form>
+    <p id="message" role="status" aria-live="polite"></p>
+  </main>
+  <script>
+    const form = document.querySelector('#open-form');
+    const codeInput = document.querySelector('#code');
+    const message = document.querySelector('#message');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      message.textContent = '';
+      message.classList.remove('invalid');
+
+      try {
+        const response = await fetch(`tabs.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Unable to load groups.');
+
+        const groups = await response.json();
+        const code = codeInput.value.trim().toLowerCase();
+        const urls = groups[code];
+        if (!Array.isArray(urls)) {
+          message.textContent = 'Invalid code.';
+          message.classList.add('invalid');
+          return;
+        }
+
+        const blocked = urls.some((url) => window.open(url, '_blank') === null);
+        if (blocked) message.textContent = 'Allow pop-ups for this site to open all tabs.';
+      } catch {
+        message.textContent = 'Could not load the group. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>
